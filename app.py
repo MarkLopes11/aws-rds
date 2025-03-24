@@ -13,14 +13,25 @@ app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 
 db = SQLAlchemy(app)
 
-class Todo(db.Model):
-    id = db.Column(db.Integer, primary_key=True)
-    task = db.Column(db.String(255), nullable=False)
-    completed = db.Column(db.Boolean, default=False)
+# Define the Student model
+class Student(db.Model):
+    __tablename__ = 'students'
+    id = db.Column(db.Integer, primary_key=True)  # Primary key
+    name = db.Column(db.String(100), nullable=False)
+    email = db.Column(db.String(100), unique=True, nullable=False)
+    phone = db.Column(db.String(15))
+    major = db.Column(db.String(100))
 
     def to_dict(self):
-        return {"id": self.id, "task": self.task, "completed": self.completed}
+        return {
+            "id": self.id,
+            "name": self.name,
+            "email": self.email,
+            "phone": self.phone,
+            "major": self.major
+        }
 
+# Create the table in the database
 with app.app_context():
     db.create_all()
 
@@ -28,38 +39,57 @@ with app.app_context():
 def home():
     return render_template('index.html')
 
-@app.route('/todos', methods=['GET'])
-def get_todos():
-    todos = Todo.query.all()
-    return jsonify([todo.to_dict() for todo in todos])
-
-@app.route('/todos', methods=['POST'])
-def add_todo():
+# Create Student (POST)
+@app.route('/students', methods=['POST'])
+def create_student():
     data = request.get_json()
-    new_todo = Todo(task=data['task'])
-    db.session.add(new_todo)
+    new_student = Student(
+        name=data['name'],
+        email=data['email'],
+        phone=data.get('phone'),
+        major=data.get('major')
+    )
+    db.session.add(new_student)
     db.session.commit()
-    return jsonify(new_todo.to_dict()), 201
+    return jsonify(new_student.to_dict()), 201
 
-@app.route('/todos/<int:id>', methods=['PUT'])
-def update_todo(id):
-    todo = Todo.query.get(id)
-    if not todo:
-        return jsonify({"error": "Todo not found"}), 404
+# Get All Students (GET)
+@app.route('/students', methods=['GET'])
+def get_students():
+    students = Student.query.all()
+    return jsonify([student.to_dict() for student in students])
+
+# Get Student by ID (GET)
+@app.route('/students/<int:id>', methods=['GET'])
+def get_student(id):
+    student = Student.query.get(id)
+    if not student:
+        return jsonify({'error': 'Student not found'}), 404
+    return jsonify(student.to_dict())
+
+# Update Student by ID (PUT)
+@app.route('/students/<int:id>', methods=['PUT'])
+def update_student(id):
+    student = Student.query.get(id)
+    if not student:
+        return jsonify({'error': 'Student not found'}), 404
     data = request.get_json()
-    todo.task = data.get('task', todo.task)
-    todo.completed = data.get('completed', todo.completed)
+    student.name = data.get('name', student.name)
+    student.email = data.get('email', student.email)
+    student.phone = data.get('phone', student.phone)
+    student.major = data.get('major', student.major)
     db.session.commit()
-    return jsonify(todo.to_dict())
+    return jsonify(student.to_dict())
 
-@app.route('/todos/<int:id>', methods=['DELETE'])
-def delete_todo(id):
-    todo = Todo.query.get(id)
-    if not todo:
-        return jsonify({"error": "Todo not found"}), 404
-    db.session.delete(todo)
+# Delete Student by ID (DELETE)
+@app.route('/students/<int:id>', methods=['DELETE'])
+def delete_student(id):
+    student = Student.query.get(id)
+    if not student:
+        return jsonify({'error': 'Student not found'}), 404
+    db.session.delete(student)
     db.session.commit()
-    return jsonify({"message": "Todo deleted successfully"})
+    return jsonify({'message': 'Student deleted successfully'})
 
 if __name__ == '__main__':
     app.run(debug=True)

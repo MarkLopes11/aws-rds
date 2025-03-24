@@ -1,4 +1,4 @@
-/* Modern Todo List Styling */
+/* Modern Student Registration Styling */
 :root {
   --primary-color: #2c3e50;
   --secondary-color: #34495e;
@@ -34,9 +34,29 @@ h1 {
   font-weight: 600;
 }
 
-.promo form {
+/* Badge Styling */
+.badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.5rem 1rem;
+  background: rgba(0, 0, 0, 0.05);
+  border: 1px solid rgba(0, 0, 0, 0.1);
+  border-radius: var(--border-radius);
+  margin-bottom: 2rem;
+}
+
+.badge-dot {
+  width: 10px;
+  height: 10px;
+  background: #f43f5e;
+  border-radius: 50%;
+}
+
+/* Form Styling */
+form {
   display: grid;
-  grid-template-columns: 1fr auto;
+  grid-template-columns: 1fr 1fr;
   gap: 16px;
   margin-bottom: 2rem;
 }
@@ -58,6 +78,7 @@ h1 {
   outline: none;
 }
 
+/* Button Styling */
 button {
   background-color: var(--accent-color);
   color: white;
@@ -77,10 +98,11 @@ button:hover {
   transform: translateY(-1px);
 }
 
+/* Card Styling */
 .card {
   display: flex;
-  justify-content: space-between; /* Push content apart */
-  align-items: center; /* Align items vertically */
+  justify-content: space-between;
+  align-items: center;
   width: 100%;
   background: var(--card-background);
   padding: 16px;
@@ -100,16 +122,17 @@ button:hover {
 .task-container {
   display: flex;
   align-items: center;
-  flex-grow: 1; /* Allow task text to expand */
+  flex-grow: 1;
   gap: 12px;
 }
 
-/* Flexbox for the button group */
+/* Button Group */
 .button-group {
   display: flex;
   gap: 8px;
 }
 
+/* Title Styling */
 .title {
   font-weight: 600;
   font-size: 1.1rem;
@@ -119,6 +142,7 @@ button:hover {
   margin-bottom: 12px;
 }
 
+/* Steps for displaying student details */
 .steps {
   padding: 8px 0;
 }
@@ -136,7 +160,8 @@ button:hover {
   color: var(--text-color);
 }
 
-.checkout-btn {
+/* Edit and Delete Buttons */
+.edit-btn {
   background-color: #f8f9fa;
   border: 1px solid #e1e1e1;
   color: var(--text-color);
@@ -147,10 +172,24 @@ button:hover {
   transition: var(--transition);
 }
 
-.checkout-btn:hover {
+.edit-btn:hover {
   background-color: var(--accent-color);
   border-color: var(--accent-color);
   color: white;
+}
+
+.delete-btn {
+  background-color: rgba(244, 63, 94, 0.1);
+  border: 1px solid rgba(244, 63, 94, 0.3);
+  color: #f43f5e;
+  padding: 8px 16px;
+  border-radius: var(--border-radius);
+  transition: var(--transition);
+}
+
+.delete-btn:hover {
+  background-color: rgba(244, 63, 94, 0.2);
+  border-color: rgba(244, 63, 94, 0.4);
 }
 
 /* Responsive Design */
@@ -159,18 +198,16 @@ button:hover {
     padding: 10px;
   }
   
-  .card {
-    width: 100%;
-  }
-  
-  .step {
+  form {
     grid-template-columns: 1fr;
-    gap: 8px;
   }
   
   h1 {
     font-size: 2rem;
   }
 
-  
+  .card {
+    flex-direction: column;
+    gap: 8px;
+  }
 }
